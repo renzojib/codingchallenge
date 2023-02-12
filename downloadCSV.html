@@ -1,0 +1,94 @@
+<script>
+    //fetching data
+    async function getData () {
+        //data to be transformed to csv file
+        let data = []
+
+        // Setting csv header
+        data.push(['name,diameter,gravity,climate,population'])
+        try {
+
+            url = 'https://swapi.dev/api/planets/'
+            
+            //fetching first page
+            let response = await fetch(url)
+
+            //checking for server response
+            if (response.ok) {
+                let newData = await response.json();
+
+                //Getting all records for required columns
+                while(newData.next) {
+                    // console.log(newData.next)
+
+                    //Looping through eash record for cleanup
+                    for (let result of newData.results) {
+                        let tempArray = []
+
+                        //Cleanup logic for each record
+                        if ((result.name.toLowerCase() != 'n/a' && result.name.toLowerCase() != 'unknown')  && (result.diameter.toLowerCase() != 'n/a' && result.diameter.toLowerCase() != 'unknown')  && (result.gravity.toLowerCase() != 'n/a' && result.gravity.toLowerCase() != 'unknown')  && (result.climate.toLowerCase() != 'n/a' && result.climate.toLowerCase() != 'unknown') && (result.population.toLowerCase() != 'n/a' && result.population.toLowerCase() != 'unknown')) {
+                            tempArray[0] = result.name.replaceAll(',', ' |')
+                            tempArray[1] = result.diameter.replaceAll(',', ' |')
+                            tempArray[2] = result.gravity.replaceAll(',', ' |')
+                            tempArray[3] = result.climate.replaceAll(',', ' |')
+                            tempArray[4] = result.population.replaceAll(',', ' |')
+
+                            //adding to data array
+                            data.push(tempArray.join(','))
+                        } 
+                        
+                        // Uncomment the console.logs below to check that cleanup logic works
+                        // console.log(result.name, result.diameter, result.gravity, result.climate,result.population)
+                        // console.log(tempArray)                                                                      
+                    }
+
+                    // Logic to loop through pages by fetching newData.next
+                    response = await fetch(newData.next)
+                    if (response.ok) {
+                        newData = await response.json()
+                    } else {
+                        console.log(`Error occured fetching from ${newData.next}`)
+                        throw Error(response.error())
+                    }
+                }
+
+
+            }
+
+            //join header and all record
+            return [data.join('\n')]
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    // function to download csv
+    async function downloadCSV () {
+        try {
+
+            // Creating csv format blob
+            var blob = new Blob(await getData(), { type: 'text/csv' } )
+
+            // creating a DataURL from blob
+            var url = URL.createObjectURL(blob)
+
+            //Creating an anchor tag to facilitate download
+            var a = document.createElement('a')
+            a.setAttribute('href', url)
+            a.setAttribute('download', 'planets.csv')
+
+            //Simulating a click event
+            a.click()
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+    //calling downloadCSV function
+    downloadCSV()
+
+    
+</script>
