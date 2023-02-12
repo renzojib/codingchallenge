@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleveland Guardians</title>
+    <link href="reset.css" rel="stylesheet" type="text/css"></link>
+    <link href="style.css" rel="stylesheet" type="text/css"></link>
+    <script src="main.js" type="text/javascript"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a class="home-a" href="index.html">CLEVELAND GUARDIANS</a>
+            <div class="auth-wrapper">
+                <a class="login-a" id="login-a">LOG IN</a>
+                <a class="logout-a" id="logout-a">LOG OUT</a>
+            </div>
+        </nav>
+    </header>
+    <section class="main-wrapper">
+        <section class="content-section" id="content-section">
+            <div class="greeting-wrapper">
+                <h1 class="greetingh1">Hello <span id="content-name">Employee,</span></h1>
+                <p class="norequest-p" id="norequest-p">You do not have any request right now</p>
+            </div>
+            <article class="request-article" id="request-article">
+                
+            </article>
+        </section>
+    
+        <section class="login-section" id="login-section">
+            <h2 class="top">Log In</h2>
+            <div class="error-div" id="login-error"></div>
+            <div class="success-msg" id="success-msg"></div>
+            <label for="email" class="top">Email
+                <input type="email" id="login-email" class="email">
+            </label>
+            <label for="pw">Password
+                <input type="password" id="login-pw" class="pw">
+            </label>
+            <button class="login-btn" id="login-btn">Log In</button>
+            <p class="form-question">Don't have an account? <span class="signup-span" id="signup-span">Sign up</span></p>
+        </section>
+
+        <section class="signup-section" id="signup-section">
+            <h2 class="top">Register</h2>
+            <div class="error-div" id="signup-error"></div>
+            <label for="fname">First Name
+                <input type="text" id="fname" class="fname">
+            </label>
+            <label for="lname">Last Name
+                <input type="text" id="lname" class="lname">
+            </label>
+            <label for="email">Email
+                <input type="email" id="signup-email" class="email">
+            </label>
+            <label for="pw">Password
+                <input type="password" id="signup-pw" class="pw">
+            </label>
+            <button class="signup-btn" id="signup-btn">Register</button>
+            <p class="form-question"><span id="success-msg">Already have an account? </span><span class="login-span" id="login-span">Log In</span></p>
+        </section>
+    </section>
+</body>
+</html>
