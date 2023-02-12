@@ -20,7 +20,7 @@ window.onload = () => {
     const loginError = document.getElementById('login-error');
     const reqArticle = document.getElementById('request-article');
     const noRequest = document.getElementById('norequest-p');
-    const baseUrl = 'https://cleguardians.onrender.com';
+    const baseUrl = 'https://cleguardians.onrender.com/';
 
     (function () {
         if (sessionStorage.getItem('empInfo')) {
