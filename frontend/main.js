@@ -46,10 +46,10 @@ window.onload = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    fname: fname.value,
-                    lname: lname.value,
-                    email: signUpEmail.value,
-                    password: signUpPw.value
+                    fname: fname.value.trim(),
+                    lname: lname.value.trim(),
+                    email: signUpEmail.value.trim(),
+                    password: signUpPw.value.trim()
                 })
             })
 

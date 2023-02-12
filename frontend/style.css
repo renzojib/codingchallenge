@@ -202,3 +202,10 @@ h2.top {
     cursor: pointer;
     color: rgb(31, 90, 151);
 }
+
+@media screen and (max-width: 900px) {
+    /* wrap all below nav */
+    .main-wrapper {
+        height: max(100vh, 700px);
+    }
+}
