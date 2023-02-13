@@ -181,23 +181,9 @@ window.onload = () => {
 
                             for (let request of requestData.requests) {
 
-                                // for every request fetch employee name from Employee table
-                                let employee = await fetch(`${baseUrl}getemp/${request.employee_id}`)
-
-                                // Capture server error
-                                if (!employee.ok) {
-                                    let errEmpData = await employee.text()
-                                    let errEmpJson = JSON.parse(errEmpData)
-                                    throw new Error(errEmpJson.error);
-                                }
-
-                                // if no error, display name
-                                if (employee.ok) {
-                                    let employeeData = await employee.json()
-
-                                    // isAdmin = 'yes' requests template
+                                // isAdmin = 'yes' requests template
                                     let info = `<div class="request-wrapper">
-                                    <h3 class="requesth3">Name: ${employeeData.employee.name}</h3>
+                                    <h3 class="requesth3">Name: ${request.Employee.name}</h3>
                                     <h3 class="requesth3">Request ID: ${request.request_id}</h3>
                                     <h3 class="requesth3">Date requested: ${request.date_requested}</h3>
                                     <h3 class="requesth3">Entry Time: ${request.entry_time}</h3>
@@ -206,7 +192,6 @@ window.onload = () => {
                                     <h3 class="requesth3">Approved: ${request.isApproved}</h3>
                                     </div>`
                                     infoArr.push(info)
-                                }
                             }
 
                             // Save session Info and display request for isAdmin = 'yes'
@@ -291,6 +276,8 @@ window.onload = () => {
 
     logoutNav.onclick = () => {
         sessionStorage.clear()
+        logoutNav.style.display = 'none'
+        loginNav.style.display = 'inline-flex'
         signUpSection.style.display = 'inline-flex'
         loginSection.style.display = 'none'
         contentSection.style.display = 'none'

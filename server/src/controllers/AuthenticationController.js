@@ -85,28 +85,11 @@ module.exports = {
       })
     }
   },
-  async getEmp (req, res) {
-    try {
-      const id = req.params.id
-      const employee = await Employees.findOne({
-        where: {
-          employee_id: id
-        }
-      })
-      const employeeJson = employee.toJSON()
-      res.send({
-        employee: employeeJson
-      })
-    } catch (err) {
-      console.log(err)
-      res.status(500).send({
-        error: 'An error has occured while fetching all employee'
-      })
-    }
-  },
   async allRequests (req, res) {
     try {
-      const allReqs = await Requests.findAll()
+      const allReqs = await Requests.findAll({
+        include: Employees
+      })
       const allReqsJson = JSON.parse(JSON.stringify(allReqs))
       res.send({
         requests: allReqsJson

@@ -34,4 +34,12 @@ fs
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 
+// Join Employees and Request table
+db.Employees.hasMany(db.Requests, {
+  foreignKey: 'employee_id'
+})
+db.Requests.belongsTo(db.Employees, {
+  foreignKey: 'employee_id'
+})
+
 module.exports = db
