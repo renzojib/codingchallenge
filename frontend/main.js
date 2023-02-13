@@ -1,8 +1,9 @@
 window.onload = () => {
+    const contentTitle = document.getElementById('content-section-h2');
     const contentName = document.getElementById('content-name');
-    const contentSection = document.getElementById('content-section');
-    const signUpSection = document.getElementById('signup-section');
-    const loginSection = document.getElementById('login-section');
+    const contentSection = document.getElementById('main-wrapper-c');
+    const signUpSection = document.getElementById('main-wrapper-s');
+    const loginSection = document.getElementById('main-wrapper-l');
     const fname = document.getElementById('fname');
     const lname = document.getElementById('lname');
     const signUpEmail = document.getElementById('signup-email');
@@ -20,16 +21,16 @@ window.onload = () => {
     const loginError = document.getElementById('login-error');
     const reqArticle = document.getElementById('request-article');
     const noRequest = document.getElementById('norequest-p');
-    const baseUrl = 'https://cleguardians.onrender.com/';
+    const baseUrl = 'http://localhost:8081/';
 
     (function () {
         if (sessionStorage.getItem('empInfo')) {
             let sessionInfo = JSON.parse(sessionStorage.getItem('empInfo'))
             if (sessionInfo.hasRequests) {
                 reqArticle.innerHTML = sessionInfo.info
-                displayContent(sessionInfo.name)
+                displayContent(sessionInfo.name, sessionInfo.notAdmin)
             } else {
-                displayContent(sessionInfo.name)
+                displayContent(sessionInfo.name, sessionInfo.notAdmin)
                 noRequest.style.display = 'inline-flex'
             }
         }
@@ -96,7 +97,8 @@ window.onload = () => {
             }
 
             if (response.ok) {
-                var data = await response.json()
+                const data = await response.json()
+                const notAdmin = data.isAdmin === 'no' 
 
                 // Check if user is not an employee
                 if(!data.isEmployee) {
@@ -104,7 +106,7 @@ window.onload = () => {
                 } else {
 
                     //  Check if employee is not an admin
-                    if (data.isAdmin === 'no') {
+                    if (notAdmin) {
 
                         // Fetch requests
                         const requests = await fetch(`${baseUrl}notadmin/${data.isEmployee}`)
@@ -120,7 +122,7 @@ window.onload = () => {
                         if (requests.ok) {
                             let requestData = await requests.json()
                             resetForms()
-                            displayContent(data.fname)
+                            displayContent(data.fname, notAdmin)
                             let infoArr = []
                             
                             // Verify that employee has requests
@@ -143,9 +145,10 @@ window.onload = () => {
                                 let empInfo = JSON.stringify({
                                     info: infoArr.join(''),
                                     name: data.fname,
-                                    hasRequests: true
+                                    hasRequests: true,
+                                    notAdmin: true
                                 })
-                                sessionStorage.clear()
+                                sessionStorage.removeItem('empInfo')
                                 sessionStorage.setItem('empInfo', empInfo)
                                 reqArticle.innerHTML = infoArr.join('')
                             } else {
@@ -153,9 +156,10 @@ window.onload = () => {
                                 // Save session information for no request
                                 let empInfo = JSON.stringify({
                                     name: data.fname,
-                                    hasRequests: false
+                                    hasRequests: false,
+                                    notAdmin: true
                                 })
-                                sessionStorage.clear()
+                                sessionStorage.removeItem('empInfo')
                                 sessionStorage.setItem('empInfo', empInfo)
 
                                 // Display no request message if no request
@@ -198,14 +202,15 @@ window.onload = () => {
                             let empInfo = JSON.stringify({
                                 info: infoArr.join(''),
                                 name: data.fname,
-                                hasRequests: true
+                                hasRequests: true,
+                                notAdmin: false
                             })
-                            sessionStorage.clear()
+                            sessionStorage.removeItem('empInfo')
                             sessionStorage.setItem('empInfo', empInfo)
 
                             reqArticle.innerHTML = infoArr.join('')
                             resetForms()
-                            displayContent(data.fname)
+                            displayContent(data.fname, notAdmin)
                         }
 
                     }                  
@@ -227,17 +232,23 @@ window.onload = () => {
         signUpSection.style.display = 'none'
         signUpSuccess.innerHTML = data.msg
         signUpSuccess.style.display = 'inline-flex'
-        loginSection.style.display = 'inline-flex'
+        loginSection.style.display = 'flex'
     }
 
     // Display requests
-    function displayContent(name) {
+    function displayContent(name, notAdmin) {
+        if (notAdmin) {
+            contentTitle.innerHTML = 'Your Requests:'
+        } else {
+            contentTitle.innerHTML = 'Employee Requests:'
+        }
+        contentTitle.style.display = 'block'
         contentName.innerHTML = name
         loginSection.style.display = 'none'
         signUpSection.style.display = 'none'
         loginNav.style.display = 'none'
         logoutNav.style.display = 'inline-flex'
-        contentSection.style.display = 'inline-flex'
+        contentSection.style.display = 'block'
     }
 
     // Display error message if login email is not found in Employees model
@@ -259,26 +270,26 @@ window.onload = () => {
     loginNav.onclick = () => {
         resetForms()
         signUpSection.style.display = 'none'
-        loginSection.style.display = 'inline-flex'
+        loginSection.style.display = 'flex'
     }
 
     loginSpan.onclick = () => {
         resetForms()
         signUpSection.style.display = 'none'
-        loginSection.style.display = 'inline-flex'
+        loginSection.style.display = 'flex'
     }
 
     signUpSpan.onclick = () => {
         resetForms()
-        signUpSection.style.display = 'inline-flex'
+        signUpSection.style.display = 'flex'
         loginSection.style.display = 'none'
     } 
 
     logoutNav.onclick = () => {
-        sessionStorage.clear()
+        sessionStorage.removeItem('empInfo')
         logoutNav.style.display = 'none'
         loginNav.style.display = 'inline-flex'
-        signUpSection.style.display = 'inline-flex'
+        signUpSection.style.display = 'flex'
         loginSection.style.display = 'none'
         contentSection.style.display = 'none'
     }
