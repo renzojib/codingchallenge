@@ -63,6 +63,11 @@ nav .logout-a {
     cursor: pointer;
 }
 
+/* noscript styling */
+noscript {
+    background-color: rgb(227, 25, 55);
+}
+
 /* wrap different sections */
 .main-wrapper-c {
     display: block;
